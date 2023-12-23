@@ -1,0 +1,16 @@
+function [outputImg, meanColors, clusterIds] = quantizeRGB(origImg, k)
+    [h, w, ~] = size(origImg);
+    outputImg = zeros(h, w);
+    numpixels = h*w;
+    % reshape the original image
+    X = reshape(origImg, [numpixels, 3]);
+    % apply kmeans function
+    [clusterIds, meanColors] = kmeans(X, k);
+    
+    lenIds = length(clusterIds);
+    
+    for i = 1: lenIds
+        [row_index, col_index] = ind2sub([h, w], i);
+        outputImg(row_index, col_index) = double(meanColors(clusterIds(i)));
+    end
+    
